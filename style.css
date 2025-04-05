@@ -1,0 +1,9 @@
+.card {
+  width: 100%;
+  max-width: 400px;
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
