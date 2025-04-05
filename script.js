@@ -1,29 +1,48 @@
-function drawNames() {
-  const numbers = Array.from({ length: 25 }, (_, i) => i + 1);
+function convertUnit() {
+  const type = document.getElementById("conversionType").value;
+  const input = parseFloat(document.getElementById("inputValue").value);
+  const resultEl = document.getElementById("result");
+  const noteEl = document.getElementById("note");
 
-  // Fisher-Yates shuffle
-  for (let i = numbers.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+  let result = 0;
+  let note = "";
+
+  if (isNaN(input)) {
+    resultEl.innerText = "숫자를 입력해주세요.";
+    noteEl.innerText = "";
+    return;
   }
 
-  const selected = numbers.slice(0, 5).sort((a, b) => a - b);
+  switch (type) {
+    case "pyToM2":
+      result = input * 3.3058;
+      note = "1평 ≈ 3.3058 m²";
+      break;
+    case "m2ToPy":
+      result = input / 3.3058;
+      note = "1 m² ≈ 0.3025평";
+      break;
+    case "kgToN":
+      result = input * 9.80665;
+      note = "1kg의 중량은 약 9.80665N (중력 가속도 기준)";
+      break;
+    case "nToKg":
+      result = input / 9.80665;
+      note = "1N은 약 0.10197kg의 질량에 해당";
+      break;
+    case "mmToInch":
+      result = input / 25.4;
+      note = "1 inch = 25.4 mm";
+      break;
+    case "inchToMm":
+      result = input * 25.4;
+      note = "1 inch = 25.4 mm";
+      break;
+    default:
+      result = 0;
+      note = "";
+  }
 
-  // SweetAlert2로 결과 표시
-  Swal.fire({
-    title: '청소당번 뽑기 완료!',
-    html: `<strong>${selected.join(', ')}</strong>`,
-    icon: 'success',
-    confirmButtonText: '확인',
-    confirmButtonColor: '#4caf50',
-    background: '#f9f9f9',
-    backdrop: `
-      rgba(0, 123, 255, 0.2)
-      left top
-      no-repeat
-    `
-  });
-
-  // 추가로 아래에도 표시
-  document.getElementById('result').innerText = '당번 번호: ' + selected.join(', ');
+  resultEl.innerText = `결과: ${result.toFixed(4)}`;
+  noteEl.innerText = note;
 }
